@@ -87,7 +87,7 @@ app.use((err, req, res, _next) => {
 async function startServer() {
   const dbConnected = await testConnection();
   if (!dbConnected) {
-    console.warn('[Warning] MySQL connection could not be established at launch. Ensure MySQL is running on port 3306.');
+    console.warn('[Warning] PostgreSQL connection could not be established at launch. Ensure PostgreSQL or DATABASE_URL is accessible.');
   }
 
   app.listen(PORT, () => {

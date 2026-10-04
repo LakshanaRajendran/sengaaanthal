@@ -68,8 +68,8 @@ export async function addBookmark(req, res) {
         [userId, poemId]
       );
     } catch (insertError) {
-      // Handle MySQL UNIQUE constraint violation gracefully
-      if (insertError.code === 'ER_DUP_ENTRY') {
+      // Handle UNIQUE constraint violation gracefully (MySQL ER_DUP_ENTRY or PostgreSQL 23505)
+      if (insertError.code === 'ER_DUP_ENTRY' || insertError.code === '23505') {
         return res.json({
           success: true,
           message: 'Poem is already bookmarked',

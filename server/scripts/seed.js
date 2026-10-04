@@ -244,12 +244,12 @@ async function seed() {
     const adminEmail = 'admin@sengaanthal.com';
     const adminPassword = 'admin123'; // Initial password to be documented in README
 
-    const [existingAdmin] = await pool.query('SELECT id, email FROM users WHERE email = ?', [adminEmail]);
+    const adminCheck = await pool.query('SELECT id, email FROM users WHERE email = $1', [adminEmail]);
 
-    if (!existingAdmin || existingAdmin.length === 0) {
+    if (!adminCheck.rows || adminCheck.rows.length === 0) {
       const hashedPassword = await bcrypt.hash(adminPassword, 10);
       await pool.query(
-        'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+        'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)',
         ['Sengaanthal Admin', adminEmail, hashedPassword, 'admin']
       );
       console.log(`[Seed] Created admin account: ${adminEmail}`);
@@ -258,24 +258,28 @@ async function seed() {
     }
 
     // 2. Check and Seed Poems
-    const [[countRow]] = await pool.query('SELECT COUNT(*) as count FROM poems');
-    if (Number(countRow.count) === 0) {
-      console.log(`[Seed] Populating ${initialPoems.length} initial poems and haikus into MySQL...`);
+    const countRes = await pool.query('SELECT COUNT(*) as count FROM poems');
+    const poemCount = Number(countRes.rows[0].count);
+
+    if (poemCount === 0) {
+      console.log(`[Seed] Populating ${initialPoems.length} initial poems and haikus into PostgreSQL...`);
       for (const p of initialPoems) {
         await pool.query(
-          'INSERT INTO poems (title, language, type, content, published) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO poems (title, language, type, content, published) VALUES ($1, $2, $3, $4, $5)',
           [p.title, p.language, p.type, p.content, p.published]
         );
       }
       console.log('[Seed] All initial poems populated successfully.');
     } else {
-      console.log(`[Seed] Database already has ${countRow.count} poems. Skipping poem re-insertion.`);
+      console.log(`[Seed] Database already has ${poemCount} poems. Skipping poem re-insertion.`);
     }
 
     console.log('\n[Seed Completed Successfully!]');
+    if (pool.end) await pool.end();
     process.exit(0);
   } catch (error) {
     console.error('[Seed Error]:', error);
+    if (pool.end) await pool.end();
     process.exit(1);
   }
 }
