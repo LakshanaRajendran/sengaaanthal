@@ -365,7 +365,7 @@
   flex-direction: column;
   gap: 3px;
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .poem-line {
@@ -376,6 +376,7 @@
   letter-spacing: 0.01em;
   margin: 0;
   padding: 0;
+  text-align: left;
 }
 
 .poem-line.tamil-font {
@@ -385,6 +386,7 @@
   letter-spacing: 0.01em;
   margin: 0;
   padding: 0;
+  text-align: left;
 }
 
 /* Haiku Specific Layout */
