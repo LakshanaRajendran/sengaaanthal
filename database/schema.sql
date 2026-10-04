@@ -1,13 +1,14 @@
 -- ===================================================
 -- SENGAANTHAL DATABASE SCHEMA
--- Database: sengaanthal_db
+-- Compatible with Local MySQL and Railway Cloud MySQL
 -- ===================================================
 
-CREATE DATABASE IF NOT EXISTS sengaanthal_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE sengaanthal_db;
+-- For local development from scratch, create and select the database:
+-- CREATE DATABASE IF NOT EXISTS sengaanthal_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE sengaanthal_db;
+--
+-- On Railway Cloud MySQL, the database is pre-created (e.g., `railway`).
+-- The table creation statements below execute directly inside the active database.
 
 -- ---------------------------------------------------
 -- TABLE: users

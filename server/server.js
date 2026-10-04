@@ -11,22 +11,28 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS setup: allow React frontend on standard dev ports
-const allowedOrigins = [
+// CORS configuration: supports local dev and production frontend
+const devOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:3000',
   'http://127.0.0.1:3000'
 ];
 
+const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/+$/, '') : null;
+const allowedOrigins = frontendUrl ? [...devOrigins, frontendUrl] : devOrigins;
+
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, or Postman)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(null, true); // Dev-friendly fallback
+
+      return callback(new Error(`CORS blocked request from origin: ${origin}`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -35,6 +41,16 @@ app.use(
 );
 
 app.use(express.json());
+
+// Root Status Endpoint for Platform Health Checkers
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    name: 'SENGAANTHAL REST API',
+    status: 'online',
+    version: '1.0.0'
+  });
+});
 
 // API Health Check
 app.get('/api/health', (req, res) => {
