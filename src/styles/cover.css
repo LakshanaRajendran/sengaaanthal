@@ -1,0 +1,125 @@
+/* ========================================================
+   SENGAANTHAL — Antique Burgundy Book Cover Styles
+   ======================================================== */
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-burgundy-deep);
+  background-image: 
+    linear-gradient(135deg, rgba(66, 13, 26, 0.2) 0%, rgba(26, 6, 11, 0.45) 100%),
+    url('/src/assets/textures/cover_art.jpg');
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-shadow: 
+    inset 0 0 40px rgba(0, 0, 0, 0.6),
+    inset 4px 0 10px rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Subtle book spine hinge highlight */
+.book-cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(255, 255, 255, 0.06) 40%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Aligns SENGAANTHAL directly in the pixel center of the gold cartouche plaque box */
+.cover-plaque-zone {
+  position: absolute;
+  top: 23.7%;
+  left: 32.5%;
+  width: 39.8%;
+  height: 7.0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cover-title {
+  font-family: var(--font-title);
+  font-size: clamp(0.64rem, 1.85vw, 0.88rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-gold-pale);
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+  padding: 0 2px;
+  line-height: 1;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #fff3cf 0%, #d4af37 60%, #997323 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 6px rgba(212, 175, 55, 0.35));
+}
+
+/* Lower area in the open burgundy space between flower stem and bottom gold border */
+.cover-lower-zone {
+  position: absolute;
+  bottom: 12.0%;
+  left: 10%;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  z-index: 10;
+}
+
+.cover-author {
+  font-family: var(--font-script), 'Pinyon Script', cursive;
+  font-size: clamp(1.15rem, 3.2vw, 1.45rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--color-gold-pale);
+  text-transform: none; /* Elegant cursive calligraphy */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 8px rgba(212, 175, 55, 0.25);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.cover-tap-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 10px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.66rem, 1.6vw, 0.74rem);
+  letter-spacing: 0.12em;
+  color: var(--color-gold-antique);
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  background: rgba(26, 6, 11, 0.55);
+  border-radius: 2px;
+  animation: gentlePulse 2.8s infinite ease-in-out;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+  }
+}

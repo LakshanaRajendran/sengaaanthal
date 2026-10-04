@@ -1,0 +1,121 @@
+/* ========================================================
+   SENGAANTHAL — Global Antique Stylesheet
+   Palette: Deep Burgundy, Antique Gold, Warm Ivory, Muted Crimson
+   ======================================================== */
+
+:root {
+  /* Rich Antique Burgundy Palette */
+  --color-burgundy-darkest: #1a060b;
+  --color-burgundy-deep: #2c0812;
+  --color-burgundy-rich: #420d1a;
+  --color-burgundy-mid: #5d1425;
+  --color-burgundy-light: #7a1f33;
+
+  /* Antique Gold & Foil Accents */
+  --color-gold-deep: #8c6a23;
+  --color-gold-antique: #b89047;
+  --color-gold-bright: #d4af37;
+  --color-gold-pale: #e9d59e;
+  --color-gold-faint: rgba(212, 175, 55, 0.18);
+
+  /* Warm Ivory / Aged Cream Pages */
+  --color-ivory-light: #fdfaf2;
+  --color-ivory-page: #f9f4e8;
+  --color-ivory-aged: #f3ebdb;
+  --color-ivory-shadow: #e5dac4;
+
+  /* Muted Crimson / Dusty Rose Florals */
+  --color-crimson-petal: #961e31;
+  --color-crimson-muted: #b03649;
+  --color-rose-dusty: #c46979;
+  --color-leaf-olive: #4f5a3b;
+
+  /* Text Colors - Deep burgundy / near-black */
+  --color-text-main: #23080e;
+  --color-text-body: #341019;
+  --color-text-muted: #6b3340;
+  --color-text-faint: #8e5864;
+  --color-text-gold: #c5a059;
+
+  /* Fonts */
+  --font-title: 'Cinzel', 'Cinzel Decorative', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+  --font-tamil: 'Noto Serif Tamil', 'Cormorant Garamond', serif;
+  --font-script: 'Pinyon Script', cursive;
+
+  /* Shadows */
+  --shadow-book: 0 25px 60px -15px rgba(20, 3, 7, 0.75), 0 10px 25px -10px rgba(0, 0, 0, 0.5);
+  --shadow-page: inset 0 0 45px rgba(80, 20, 30, 0.04), 0 2px 10px rgba(40, 10, 15, 0.08);
+  --shadow-gold: 0 0 12px rgba(212, 175, 55, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: var(--color-burgundy-darkest);
+  color: var(--color-text-main);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #380a16 0%, #20050c 55%, #120206 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background vignette & ambient antique lighting */
+#root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Selection aesthetics */
+::selection {
+  background: rgba(150, 30, 49, 0.25);
+  color: var(--color-burgundy-darkest);
+}
+
+/* Button Reset */
+button {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Accessible hidden text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

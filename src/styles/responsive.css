@@ -1,0 +1,228 @@
+/* ========================================================
+   SENGAANTHAL — Responsive & Antique Menu Styles
+   ======================================================== */
+
+/* Antique Menu Modal / Drawer */
+.antique-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 2, 7, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeInBackdrop 0.25s ease-out;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.antique-menu-scroll {
+  width: 100%;
+  max-width: 320px;
+  background: #fbf8f0;
+  background-image: 
+    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(238, 226, 206, 0.5) 100%),
+    url('/src/assets/textures/parchment_paper.jpg');
+  background-size: cover;
+  border: 1px solid rgba(184, 144, 71, 0.45);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.7),
+    inset 0 0 30px rgba(80, 20, 30, 0.06);
+  border-radius: 3px;
+  padding: 20px 18px;
+  position: relative;
+  text-align: center;
+  animation: slideUpScroll 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpScroll {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.antique-menu-border-inner {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(184, 144, 71, 0.25);
+  pointer-events: none;
+}
+
+.antique-menu-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  letter-spacing: 0.25em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.antique-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.antique-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(184, 144, 71, 0.35);
+  border-radius: 2px;
+  color: var(--color-burgundy-deep);
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.antique-menu-item:hover,
+.antique-menu-item:focus-visible {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-crimson-petal);
+  box-shadow: 0 2px 8px rgba(150, 30, 49, 0.12);
+  transform: translateY(-1px);
+}
+
+.menu-item-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.menu-item-icon {
+  color: var(--color-crimson-muted);
+  font-size: 0.85rem;
+}
+
+.menu-item-badge {
+  font-size: 0.74rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.antique-menu-close-btn {
+  margin-top: 14px;
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-burgundy-deep);
+  padding: 4px 14px;
+  border-bottom: 1px solid var(--color-burgundy-deep);
+  transition: all 0.2s ease;
+}
+
+.antique-menu-close-btn:hover {
+  color: var(--color-crimson-petal);
+  border-bottom-color: var(--color-crimson-petal);
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN RULES
+   ======================================================== */
+
+/* Mobile Base (under 600px) */
+@media (max-width: 600px) {
+  .book-viewport {
+    padding: 6px 4px 10px 4px;
+  }
+
+  .book-header-toolbar {
+    padding: 2px 6px 4px 6px;
+  }
+
+  .book-brand-badge {
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+  }
+
+  .vintage-icon-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .page-inner-content {
+    padding: 12px 14px 10px 14px !important;
+  }
+
+  .poem-strophes {
+    gap: 3px !important;
+  }
+
+  .poem-line {
+    font-size: 0.74rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .poem-line.tamil-font {
+    font-size: 0.76rem !important;
+    line-height: 1.48 !important;
+  }
+
+  .haiku-box {
+    padding: 8px 14px !important;
+    margin: 8px 0 !important;
+  }
+
+  .book-nav-arrow {
+    padding: 4px 9px;
+    font-size: 0.74rem;
+  }
+
+  .book-page-indicator {
+    font-size: 0.76rem;
+    padding: 2px 8px;
+  }
+}
+
+/* Tablet & Desktop (601px and above) */
+@media (min-width: 601px) {
+  .book-viewport {
+    padding: 14px 16px 18px 16px;
+  }
+
+  .page-inner-content {
+    padding: 18px 22px 14px 22px !important;
+  }
+
+  .poem-strophes {
+    gap: 4px !important;
+  }
+
+  .poem-line {
+    font-size: 0.84rem !important;
+    line-height: 1.44 !important;
+  }
+
+  .poem-line.tamil-font {
+    font-size: 0.86rem !important;
+    line-height: 1.54 !important;
+  }
+
+  .haiku-line {
+    font-size: 1.05rem !important;
+  }
+
+  .book-stage {
+    padding: 6px 0;
+  }
+}

@@ -1,0 +1,469 @@
+/* ========================================================
+   SENGAANTHAL — Interior Pages, Table of Contents & Typography
+   ======================================================== */
+
+/* General Page Layout */
+.page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Page Frame Border: Fine antique double-line margin */
+.page-border-frame {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(184, 144, 71, 0.28);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.page-border-frame::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 1px solid rgba(184, 144, 71, 0.14);
+}
+
+/* Corner Fleurons on Pages */
+.page-corner-flourish {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--color-gold-antique);
+  opacity: 0.45;
+}
+
+.flourish-tl { top: -4px; left: -4px; }
+.flourish-tr { top: -4px; right: -4px; }
+.flourish-bl { bottom: -4px; left: -4px; }
+.flourish-br { bottom: -4px; right: -4px; }
+
+/* Fleurons and Emojis Completely Removed */
+.page-header-ornament,
+.fleuron-gold {
+  display: none !important;
+}
+
+/* Selection Pages (Language & Type) */
+.selection-page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 310px;
+  margin: 0 auto;
+  z-index: 3;
+}
+
+.selection-question {
+  font-family: var(--font-title);
+  font-size: clamp(1.05rem, 3.4vw, 1.35rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.selection-options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 240px;
+}
+
+/* Antique Book Choice Buttons */
+.vintage-choice-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background: rgba(253, 250, 242, 0.75);
+  border: 1px solid rgba(184, 144, 71, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(44, 8, 18, 0.05);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.vintage-choice-card::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 1px dashed rgba(184, 144, 71, 0.25);
+  pointer-events: none;
+}
+
+.vintage-choice-card:hover,
+.vintage-choice-card:focus-visible {
+  border-color: var(--color-crimson-petal);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 3px 10px rgba(150, 30, 49, 0.12);
+  transform: translateY(-1px);
+}
+
+.vintage-choice-card.selected {
+  border-color: var(--color-crimson-petal);
+  background: rgba(247, 237, 239, 0.85);
+  box-shadow: 0 2px 6px rgba(150, 30, 49, 0.15);
+}
+
+.choice-label-primary {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  color: var(--color-burgundy-deep);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.choice-label-primary.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Preface Page */
+.preface-content-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 4px;
+  z-index: 3;
+}
+
+.preface-title {
+  font-family: var(--font-title);
+  font-size: 1.22rem;
+  letter-spacing: 0.28em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.preface-body {
+  margin: 12px 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preface-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.92rem, 2.7vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--color-text-body);
+}
+
+.preface-line.tamil-font {
+  font-family: var(--font-tamil);
+  font-style: normal;
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.preface-author {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--color-burgundy-deep);
+  margin-top: 10px;
+}
+
+/* ========================================================
+   TABLE OF CONTENTS (CONTENTS / பொருளடக்கம்)
+   ======================================================== */
+.toc-page-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 3;
+  padding: 4px 2px;
+}
+
+.toc-inner-box {
+  width: 100%;
+  max-width: 320px;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toc-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 3.4vw, 1.32rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.toc-title.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.toc-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.toc-item-link {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(184, 144, 71, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.toc-item-link:hover,
+.toc-item-link:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--color-crimson-petal);
+  transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(150, 30, 49, 0.1);
+}
+
+.toc-item-num {
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  color: var(--color-gold-deep);
+  margin-right: 6px;
+  font-weight: 600;
+}
+
+.toc-item-title {
+  font-family: var(--font-title);
+  font-size: clamp(0.82rem, 2.4vw, 0.94rem);
+  letter-spacing: 0.06em;
+  color: var(--color-burgundy-deep);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 65%;
+}
+
+.toc-item-title.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.toc-item-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(184, 144, 71, 0.45);
+  margin: 0 6px;
+  position: relative;
+  top: -3px;
+}
+
+.toc-item-page {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ========================================================
+   POEM & HAIKU PAGES (Strictly Fitted, Proportional Typography)
+   ======================================================== */
+.poem-page-container {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  padding: 4px 2px;
+  box-sizing: border-box;
+}
+
+/* Center box containing title and stanzas, with right margin for feather */
+.poem-fitting-box {
+  width: 100%;
+  max-width: 86%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto 0;
+  z-index: 5;
+  box-sizing: border-box;
+}
+
+.poem-title {
+  font-family: var(--font-title);
+  font-size: clamp(0.88rem, 2.6vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.poem-title.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: clamp(0.95rem, 2.9vw, 1.18rem);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.poem-strophes {
+  margin: 2px 0 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  text-align: center;
+}
+
+.poem-line {
+  font-family: var(--font-serif);
+  font-size: clamp(0.74rem, 2.1vw, 0.88rem);
+  line-height: 1.40;
+  color: var(--color-text-body);
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding: 0;
+}
+
+.poem-line.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: clamp(0.76rem, 2.25vw, 0.90rem);
+  line-height: 1.50;
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding: 0;
+}
+
+/* Haiku Specific Layout */
+.haiku-box {
+  padding: 10px 16px;
+  margin: 8px 0;
+  border-left: 1.5px solid rgba(184, 144, 71, 0.4);
+  border-right: 1.5px solid rgba(184, 144, 71, 0.4);
+}
+
+.haiku-line {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.94rem, 2.8vw, 1.12rem);
+  line-height: 1.65;
+  color: var(--color-burgundy-deep);
+}
+
+.haiku-line.tamil-font {
+  font-family: var(--font-tamil);
+  font-style: normal;
+  font-size: 1.02rem;
+  line-height: 1.8;
+}
+
+/* Antique Page Number Footer */
+.page-footer-num {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  z-index: 5;
+}
+
+/* ========================================================
+   ASHES OF SENGAANTHAL (Quiet Final Page)
+   ======================================================== */
+.ashes-page-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.ashes-center-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.ashes-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 3.8vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.ashes-title.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  text-transform: none;
+}
+
+.ashes-line {
+  width: 45px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold-antique), transparent);
+  margin-top: 6px;
+}

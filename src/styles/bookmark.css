@@ -1,0 +1,337 @@
+/* ========================================================
+   SENGAANTHAL — Small Corner Feather & Long Tucked Feather Bookmark
+   ======================================================== */
+
+/* 1. Small Feather Icon Button on the Top Right */
+.small-feather-corner-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(184, 144, 71, 0.45);
+  box-shadow: 0 1px 4px rgba(44, 8, 18, 0.08);
+  cursor: pointer;
+  outline: none;
+  z-index: 30;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.small-feather-corner-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-crimson-petal);
+  box-shadow: 0 2px 8px rgba(150, 30, 49, 0.2);
+  transform: scale(1.08);
+}
+
+.small-feather-svg {
+  display: block;
+  transition: transform 0.22s ease;
+}
+
+.small-feather-corner-btn:hover .small-feather-svg {
+  transform: rotate(-10deg);
+}
+
+.small-feather-corner-btn.active-bookmark {
+  background: rgba(66, 13, 26, 0.92);
+  border-color: var(--color-gold-bright);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.45);
+}
+
+/* 2. Big Long Feather placed between the pages when bookmarked */
+.big-long-feather-bookmark {
+  position: absolute;
+  top: -4px;
+  right: 14px;
+  z-index: 20;
+  cursor: pointer;
+  animation: slideDownFeather 0.42s cubic-bezier(0.18, 0.9, 0.32, 1.25) forwards;
+  filter: drop-shadow(-3px 5px 9px rgba(35, 5, 12, 0.35));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.big-long-feather-bookmark:hover {
+  transform: translateY(2px) scale(1.02);
+  filter: drop-shadow(-3px 7px 12px rgba(150, 30, 49, 0.45));
+}
+
+@keyframes slideDownFeather {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.long-feather-svg {
+  display: block;
+  pointer-events: none;
+}
+
+/* Bookmarks Collection Page */
+.bookmarks-page-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 4px 4px 4px;
+  z-index: 3;
+}
+
+.bookmarks-page-title {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  letter-spacing: 0.24em;
+  color: var(--color-burgundy-deep);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* Language Filter Pills for Bookmarks */
+.bookmark-lang-tabs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.bookmark-tab-btn {
+  font-family: var(--font-title);
+  font-size: 0.70rem;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid rgba(184, 144, 71, 0.4);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--color-burgundy-deep);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bookmark-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-crimson-petal);
+}
+
+.bookmark-tab-btn.active {
+  background: var(--color-burgundy-deep);
+  color: var(--color-gold-pale);
+  border-color: var(--color-burgundy-deep);
+  box-shadow: 0 1px 4px rgba(44, 8, 18, 0.2);
+}
+
+.bookmarks-list-container {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 144, 71, 0.3) transparent;
+}
+
+/* Grouped sections for Tamil and English Bookmarks */
+.bookmark-group-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.bookmark-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 6px 0;
+}
+
+.bookmark-group-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(184, 144, 71, 0.35);
+}
+
+.bookmark-group-heading {
+  font-family: var(--font-title);
+  font-size: 0.70rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-burgundy-deep);
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.bookmark-group-heading.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.bookmark-group-items {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Individual Bookmarked Item Card */
+.bookmark-record-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(184, 144, 71, 0.35);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(44, 8, 18, 0.04);
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.bookmark-record-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-crimson-petal);
+  box-shadow: 0 3px 8px rgba(150, 30, 49, 0.12);
+}
+
+.bookmark-record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bookmark-record-title {
+  font-family: var(--font-title);
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  color: var(--color-burgundy-deep);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookmark-record-title.tamil-font {
+  font-family: var(--font-tamil);
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+.bookmark-page-ref {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.70rem;
+  color: var(--color-gold-deep);
+}
+
+.bookmark-record-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
+
+.bookmark-lang-pill {
+  font-family: var(--font-title);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  padding: 1px 5px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.bookmark-lang-pill.tamil {
+  background: rgba(150, 30, 49, 0.12);
+  color: var(--color-crimson-petal);
+  font-family: var(--font-tamil);
+}
+
+.bookmark-lang-pill.english {
+  background: rgba(184, 144, 71, 0.18);
+  color: var(--color-gold-deep);
+}
+
+.bookmark-record-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.bookmark-read-btn {
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-burgundy-deep);
+  border: 1px solid rgba(184, 144, 71, 0.6);
+  padding: 3px 9px;
+  border-radius: 2px;
+  background: rgba(253, 250, 242, 0.9);
+  transition: all 0.2s ease;
+}
+
+.bookmark-read-btn:hover {
+  background: var(--color-burgundy-deep);
+  color: var(--color-gold-pale);
+  border-color: var(--color-burgundy-deep);
+}
+
+.bookmark-remove-icon-btn {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  padding: 4px;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.bookmark-remove-icon-btn:hover {
+  color: var(--color-crimson-petal);
+  opacity: 1;
+}
+
+/* Poetic Empty State */
+.bookmark-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  padding: 20px 14px;
+  text-align: center;
+}
+
+.empty-state-verse {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 240px;
+}
