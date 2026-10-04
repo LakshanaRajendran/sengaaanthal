@@ -62,38 +62,52 @@ export default function Book() {
 
   const { bookmarks, toggleBookmark, removeBookmark, isBookmarked } = useBookmarks();
 
-  // Dynamic backend poem state from MySQL
-  const [apiPoems, setApiPoems] = useState(null);
+  // Dynamic backend poem state cached by category (e.g. 'tamil_poem', 'english_haiku')
+  const [poemsCache, setPoemsCache] = useState({});
   const [allPublishedPoems, setAllPublishedPoems] = useState([]);
   const [isLoadingPoems, setIsLoadingPoems] = useState(true);
+  const activeRequestIdRef = useRef(0);
 
-  // Fetch published poems from backend API (MySQL)
+  // Fetch published poems from backend API with cold-start resilience & race condition prevention
   useEffect(() => {
     let isMounted = true;
     setIsLoadingPoems(true);
 
+    const requestId = ++activeRequestIdRef.current;
+    const targetKey = `${language}_${type}`;
+
     poemService.getPublishedPoems({ language, type })
       .then((data) => {
-        if (isMounted) {
-          setApiPoems(data);
+        // Prevent race condition: ignore if component unmounted or newer request was initiated
+        if (!isMounted || requestId !== activeRequestIdRef.current) return;
+
+        // Never treat empty or invalid responses as collection erasure
+        if (Array.isArray(data) && data.length > 0) {
+          setPoemsCache((prev) => ({
+            ...prev,
+            [targetKey]: data
+          }));
         }
       })
       .catch((err) => {
-        console.warn('[Reader] Failed to load poems from backend API:', err.message);
+        console.warn('[Reader] Backend API notice:', err.message);
+        // Preserves existing poemsCache[targetKey] automatically
       })
       .finally(() => {
-        if (isMounted) setIsLoadingPoems(false);
+        if (isMounted && requestId === activeRequestIdRef.current) {
+          setIsLoadingPoems(false);
+        }
       });
 
     // Also fetch all published poems for cross-language bookmark resolution
     poemService.getPublishedPoems()
       .then((fullList) => {
-        if (isMounted) {
+        if (isMounted && Array.isArray(fullList) && fullList.length > 0) {
           setAllPublishedPoems(fullList);
         }
       })
       .catch((err) => {
-        console.warn('[Reader] Failed to load full poem index from API:', err.message);
+        console.warn('[Reader] Full poem index notice:', err.message);
       });
 
     return () => {
@@ -101,13 +115,17 @@ export default function Book() {
     };
   }, [language, type]);
 
-  // Use API poems if available; fallback to local seed data if network offline
+  // Use API poems if available; seamlessly fall back to local seed data if network offline or server waking up
   const activeCollection = useMemo(() => {
-    if (apiPoems !== null) {
-      return apiPoems;
+    const targetKey = `${language}_${type}`;
+    const cachedCategory = poemsCache[targetKey];
+
+    if (Array.isArray(cachedCategory) && cachedCategory.length > 0) {
+      return cachedCategory;
     }
+
     return fallbackPoems.filter((p) => p.language === language && p.type === type);
-  }, [apiPoems, language, type]);
+  }, [poemsCache, language, type]);
 
   const crossReferencePoems = useMemo(() => {
     if (allPublishedPoems && allPublishedPoems.length > 0) {
@@ -137,6 +155,9 @@ export default function Book() {
   // (5 + activeCollectionCount + 1): Ashes of Sengaanthal
   const collectionLength = Math.max(1, activeCollection.length);
   const totalPages = 5 + collectionLength + 2;
+  const collectionKey = useMemo(() => {
+    return activeCollection.map((p) => p.id).join('_');
+  }, [activeCollection]);
 
   // Sound triggering on flip
   const handlePageFlip = useCallback(
@@ -333,7 +354,7 @@ export default function Book() {
           style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
         >
           <HTMLFlipBook
-            key={`${language}-${type}-${dimensions.width}-${activeCollection.length}`}
+            key={`${language}-${type}-${dimensions.width}-${collectionKey}`}
             width={dimensions.width}
             height={dimensions.height}
             size="fixed"

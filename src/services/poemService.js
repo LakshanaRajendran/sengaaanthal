@@ -15,17 +15,48 @@ export function normalizePoemData(poem) {
   };
 }
 
+// In-memory cache preserving last successfully loaded poems per query
+const poemCache = new Map();
+
 export const poemService = {
   // Public Reader: Fetch published poems by language & type
   async getPublishedPoems({ language, type } = {}) {
+    const cacheKey = `${language || 'all'}_${type || 'all'}`;
     const params = new URLSearchParams();
     if (language) params.append('language', language);
     if (type) params.append('type', type);
 
     const query = params.toString() ? `?${params.toString()}` : '';
-    const res = await apiRequest(`/poems${query}`);
-    const list = res.poems || res.data || [];
-    return list.map(normalizePoemData);
+
+    try {
+      const res = await apiRequest(`/poems${query}`);
+      const rawList = res?.poems || res?.data;
+
+      // Only treat as valid if the server actually returned an array of poems with items
+      if (Array.isArray(rawList) && rawList.length > 0) {
+        const normalized = rawList.map(normalizePoemData);
+        poemCache.set(cacheKey, normalized);
+        return normalized;
+      }
+
+      // If server returned empty or missing structure, preserve last known successful cache
+      if (poemCache.has(cacheKey)) {
+        console.warn(`[poemService] API returned non-array/empty data for ${cacheKey}; preserving last successful cache.`);
+        return poemCache.get(cacheKey);
+      }
+
+      return Array.isArray(rawList) ? rawList.map(normalizePoemData) : [];
+    } catch (err) {
+      console.warn(`[poemService] Failed to load poems for ${cacheKey}:`, err.message);
+
+      // Requirements: Never treat an API failure as an empty array; preserve last successful data
+      if (poemCache.has(cacheKey)) {
+        console.info(`[poemService] Returning preserved cached poems for ${cacheKey}`);
+        return poemCache.get(cacheKey);
+      }
+
+      throw err;
+    }
   },
 
   // Public Reader: Fetch single published poem
