@@ -1,21 +1,32 @@
 import React, { forwardRef, useState, useMemo } from 'react';
 import BookPage from '../Book/BookPage';
 import { poems as allPoems } from '../../data/poems';
+import { paginatePoem } from '../../utils/poemPaginator';
 
 
 const BookmarkCollection = forwardRef(
-  ({ bookmarkIds, allPoems: propAllPoems, onReadPoem, onRemoveBookmark, pageNumber, currentLanguage = 'english' }, ref) => {
+  ({ bookmarkIds, allPoems: propAllPoems, startPageMap, onReadPoem, onRemoveBookmark, pageNumber, currentLanguage = 'english' }, ref) => {
     const [selectedFilter, setSelectedFilter] = useState('all'); // 'all' | 'tamil' | 'english'
 
     const availablePoems = propAllPoems && propAllPoems.length > 0 ? propAllPoems : allPoems;
 
     // Helper to calculate the page number of a poem in the flip book
     const getPoemPageNumber = (item) => {
+      if (startPageMap && startPageMap.has(String(item.id))) {
+        return startPageMap.get(String(item.id));
+      }
       const collection = availablePoems.filter(
         (p) => p.language === item.language && p.type === item.type
       );
-      const idx = collection.findIndex((p) => String(p.id) === String(item.id));
-      return 5 + (idx >= 0 ? idx : 0);
+      let pageOffset = 0;
+      for (const p of collection) {
+        if (String(p.id) === String(item.id)) {
+          return 5 + pageOffset;
+        }
+        const parts = p.type === 'haiku' ? 1 : paginatePoem(p).length;
+        pageOffset += parts;
+      }
+      return 5;
     };
 
     // Resolve all bookmarked poems across both languages

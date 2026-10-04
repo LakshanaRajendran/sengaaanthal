@@ -17,6 +17,7 @@ import PageFlipSound from '../Audio/PageFlipSound';
 import { useBookmarks } from '../../hooks/useBookmarks';
 import { poemService } from '../../services/poemService';
 import { poems as fallbackPoems } from '../../data/poems';
+import { paginatePoem } from '../../utils/poemPaginator';
 import '../../styles/admin.css';
 
 export default function Book() {
@@ -151,13 +152,34 @@ export default function Book() {
   // 3: Preface
   // 4: Table of Contents (Index)
   // 5 ..: Poem/Haiku pages (or 1 empty placeholder page if collection is empty)
-  // (5 + activeCollectionCount): Bookmarks
-  // (5 + activeCollectionCount + 1): Ashes of Sengaanthal
-  const collectionLength = Math.max(1, activeCollection.length);
-  const totalPages = 5 + collectionLength + 2;
-  const collectionKey = useMemo(() => {
-    return activeCollection.map((p) => p.id).join('_');
+  // (5 + totalPoemPages): Bookmarks
+  // (5 + totalPoemPages + 1): Ashes of Sengaanthal
+  const paginatedCollection = useMemo(() => {
+    const pages = [];
+    activeCollection.forEach((poem) => {
+      const parts = paginatePoem(poem, 14);
+      pages.push(...parts);
+    });
+    return pages;
   }, [activeCollection]);
+
+  // Map each original poem id to its starting page number in the book
+  const poemStartPageMap = useMemo(() => {
+    const map = new Map();
+    paginatedCollection.forEach((pageItem, index) => {
+      const idKey = String(pageItem.originalPoemId || pageItem.id);
+      if (!map.has(idKey)) {
+        map.set(idKey, 5 + index);
+      }
+    });
+    return map;
+  }, [paginatedCollection]);
+
+  const totalPoemPages = Math.max(1, paginatedCollection.length);
+  const totalPages = 5 + totalPoemPages + 2;
+  const collectionKey = useMemo(() => {
+    return paginatedCollection.map((p) => p.pageKey).join('_');
+  }, [paginatedCollection]);
 
   // Sound triggering on flip
   const handlePageFlip = useCallback(
@@ -291,8 +313,15 @@ export default function Book() {
     const targetCollection = crossReferencePoems.filter(
       (p) => p.language === targetPoem.language && p.type === targetPoem.type
     );
-    const itemIndex = targetCollection.findIndex((p) => String(p.id) === String(targetPoem.id));
-    const targetPage = 5 + (itemIndex >= 0 ? itemIndex : 0);
+    let pageOffset = 0;
+    for (const p of targetCollection) {
+      if (String(p.id) === String(targetPoem.id)) {
+        break;
+      }
+      const parts = p.type === 'haiku' ? 1 : paginatePoem(p, 14).length;
+      pageOffset += parts;
+    }
+    const targetPage = 5 + pageOffset;
 
     if (targetPoem.language !== language || targetPoem.type !== type) {
       pendingPageRef.current = targetPage;
@@ -401,12 +430,13 @@ export default function Book() {
               language={language}
               type={type}
               poems={activeCollection}
+              startPageMap={poemStartPageMap}
               onNavigatePoem={flipToPage}
               pageNumber={4}
             />
 
             {/* Pages 5 ..: The Filtered Poetry Collection */}
-            {activeCollection.length === 0 ? (
+            {paginatedCollection.length === 0 ? (
               <BookPage pageNumber={5}>
                 <div className="page-container poem-page-container">
                   <div className="poem-fitting-box" style={{ textAlign: 'center', marginTop: '60px' }}>
@@ -422,15 +452,16 @@ export default function Book() {
                 </div>
               </BookPage>
             ) : (
-              activeCollection.map((poem, index) => {
+              paginatedCollection.map((pageItem, index) => {
                 const pageNum = 5 + index;
-                const bookmarked = isBookmarked(poem.id);
+                const originalId = pageItem.originalPoemId || pageItem.id;
+                const bookmarked = isBookmarked(originalId);
 
-                if (poem.type === 'haiku') {
+                if (pageItem.type === 'haiku') {
                   return (
                     <HaikuPage
-                      key={poem.id}
-                      haiku={poem}
+                      key={pageItem.pageKey}
+                      haiku={pageItem}
                       isBookmarked={bookmarked}
                       onToggleBookmark={toggleBookmark}
                       pageNumber={pageNum}
@@ -440,8 +471,8 @@ export default function Book() {
 
                 return (
                   <PoemPage
-                    key={poem.id}
-                    poem={poem}
+                    key={pageItem.pageKey}
+                    poem={pageItem}
                     isBookmarked={bookmarked}
                     onToggleBookmark={toggleBookmark}
                     pageNumber={pageNum}
@@ -454,16 +485,17 @@ export default function Book() {
             <BookmarkCollection
               bookmarkIds={bookmarks}
               allPoems={crossReferencePoems}
+              startPageMap={poemStartPageMap}
               onReadPoem={handleReadFromBookmark}
               onRemoveBookmark={removeBookmark}
-              pageNumber={5 + collectionLength}
+              pageNumber={5 + totalPoemPages}
               currentLanguage={language}
             />
 
             {/* Final Blank Page: ASHES OF SENGAANTHAL */}
             <AshesPage
               language={language}
-              pageNumber={5 + collectionLength + 1}
+              pageNumber={5 + totalPoemPages + 1}
             />
           </HTMLFlipBook>
         </div>
@@ -500,7 +532,7 @@ export default function Book() {
         onNavigateType={() => flipToPage(2)}
         onNavigatePreface={() => flipToPage(3)}
         onNavigateContents={() => flipToPage(4)}
-        onNavigateBookmarks={() => flipToPage(5 + collectionLength)}
+        onNavigateBookmarks={() => flipToPage(5 + totalPoemPages)}
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled((prev) => !prev)}
         language={language}

@@ -6,7 +6,7 @@ import BookPage from '../Book/BookPage';
  * Appears right after Preface, listing all poems/haikus in the current selection
  * with direct navigation to each piece. Clean and free of emojis/fleurons.
  */
-const TableOfContents = forwardRef(({ language, type, poems, onNavigatePoem, pageNumber }, ref) => {
+const TableOfContents = forwardRef(({ language, type, poems, startPageMap, onNavigatePoem, pageNumber }, ref) => {
   const isTamil = language === 'tamil';
   const isHaiku = type === 'haiku';
 
@@ -23,7 +23,7 @@ const TableOfContents = forwardRef(({ language, type, poems, onNavigatePoem, pag
 
           <nav className="toc-list" aria-label="Poetry index">
             {poems.map((poem, index) => {
-              const targetPage = 5 + index;
+              const targetPage = (startPageMap && startPageMap.get(String(poem.id))) || (5 + index);
 
               return (
                 <button

@@ -10,7 +10,7 @@ const PoemPage = forwardRef(
       <BookPage ref={ref} pageNumber={pageNumber}>
         {/* Small feather button on top-right, and big long feather tucked between pages when active */}
         <BookmarkButton
-          poemId={poem.id}
+          poemId={poem.originalPoemId || poem.id}
           isBookmarked={isBookmarked}
           onToggle={onToggleBookmark}
         />
@@ -20,6 +20,19 @@ const PoemPage = forwardRef(
             {/* Clean title */}
             <h2 className={`poem-title ${isTamil ? 'tamil-font' : ''}`}>
               {poem.title}
+              {poem.totalParts > 1 && (
+                <span
+                  className="poem-part-num"
+                  style={{
+                    fontSize: '0.72em',
+                    opacity: 0.72,
+                    marginLeft: '8px',
+                    fontWeight: 400
+                  }}
+                >
+                  ({poem.partIndex}/{poem.totalParts})
+                </span>
+              )}
             </h2>
 
             <div className="cover-title-divider" style={{ width: '36px', margin: '4px auto 10px auto' }} />
